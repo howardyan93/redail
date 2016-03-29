@@ -1,0 +1,271 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>First Chapter | Centos 通过PPP拨号教程</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 2.6.7">
+        
+        
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+        
+    <link rel="stylesheet" href="gitbook/style.css">
+    
+        
+        <link rel="stylesheet" href="gitbook/plugins/gitbook-plugin-highlight/website.css">
+        
+    
+        
+        <link rel="stylesheet" href="gitbook/plugins/gitbook-plugin-search/search.css">
+        
+    
+        
+        <link rel="stylesheet" href="gitbook/plugins/gitbook-plugin-fontsettings/website.css">
+        
+    
+    
+
+        
+    
+    
+    
+    <link rel="prev" href="./index.html" />
+    
+
+        
+    </head>
+    <body>
+        
+        
+    <div class="book"
+        data-level="1"
+        data-chapter-title="First Chapter"
+        data-filepath="chapter1.md"
+        data-basepath="."
+        data-revision="Tue Mar 29 2016 11:42:27 GMT+0800 (中国标准时间)"
+        data-innerlanguage="">
+    
+
+<div class="book-summary">
+    <nav role="navigation">
+        <ul class="summary">
+            
+            
+            
+            
+
+            
+
+            
+    
+        <li class="chapter " data-level="0" data-path="index.html">
+            
+                
+                    <a href="./index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                        Introduction
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter active" data-level="1" data-path="chapter1.html">
+            
+                
+                    <a href="./chapter1.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.</b>
+                        
+                        First Chapter
+                    </a>
+            
+            
+        </li>
+    
+
+
+            
+            <li class="divider"></li>
+            <li>
+                <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+                    Published with GitBook
+                </a>
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+
+    <div class="book-body">
+        <div class="body-inner">
+            <div class="book-header" role="navigation">
+    <!-- Actions Left -->
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="./" >Centos 通过PPP拨号教程</a>
+    </h1>
+</div>
+
+            <div class="page-wrapper" tabindex="-1" role="main">
+                <div class="page-inner">
+                
+                
+                    <section class="normal" id="section-">
+                    
+                        <h1 id="&#x5728;-centos&#x4E0B;&#x90E8;&#x7F72;">&#x5728; CentOS&#x4E0B;&#x90E8;&#x7F72;</h1>
+<h3 id="&#x5B89;&#x88C5;vpn&#x76F8;&#x5173;&#x7A0B;&#x5E8F;">&#x5B89;&#x88C5;VPN&#x76F8;&#x5173;&#x7A0B;&#x5E8F;</h3>
+<pre><code class="lang-bash"><span class="hljs-comment">#&#x5B89;&#x88C5;&#x76F8;&#x5173;&#x7A0B;&#x5E8F;</span>
+rpm -Uvh http://dl.fedoraproject.org/pub/epel/<span class="hljs-number">6</span>/x86_64/epel-release-<span class="hljs-number">6</span>-<span class="hljs-number">8</span>.noarch.rpm
+yum install -y pptp.x86_64 pptp-setup.x86_64
+
+<span class="hljs-comment">#&#x901A;&#x8FC7;pptpsetup&#x751F;&#x6210;&#x914D;&#x7F6E;&#x6587;&#x4EF6;</span>
+pptpsetup --create <span class="hljs-variable">$VPN_NAME</span> --server <span class="hljs-variable">$VPN_Server_IP</span> --username <span class="hljs-variable">$User_Name</span> --password <span class="hljs-variable">$Password</span>  --encrypt --start
+
+<span class="hljs-comment">#&#x62F7;&#x8D1D;&#x62E8;&#x53F7;&#x5FEB;&#x6377;&#x65B9;&#x5F0F;</span>
+cp /usr/share/doc/ppp-*/scripts/poff /usr/sbin/
+cp /usr/share/doc/ppp-*/scripts/pon /usr/sbin/
+chmod +x /usr/sbin/poff
+chmod +x /usr/sbin/pon
+
+<span class="hljs-comment">#&#x914D;&#x7F6E;&#x5B89;&#x5168;&#x8DEF;&#x7531;,&#x5176;&#x4E2D; 172.30.204.1 &#x4E3A;&#x4F60;&#x7684;&#x9ED8;&#x8BA4;&#x7F51;&#x5173;&#xFF0C;&#x53EF;&#x901A;&#x8FC7; route -n|grep UG &#x627E;&#x5230;</span>
+<span class="hljs-built_in">export</span> gw=<span class="hljs-number">172.30</span>.<span class="hljs-number">204.1</span>
+route add -net <span class="hljs-number">172.16</span>.<span class="hljs-number">0.0</span>/<span class="hljs-number">12</span> gateway <span class="hljs-variable">$gw</span>
+route add -net <span class="hljs-number">10.0</span>.<span class="hljs-number">0.0</span>/<span class="hljs-number">8</span> gateway <span class="hljs-variable">$gw</span>
+
+<span class="hljs-comment">#&#x52A0;&#x5165;&#x5F00;&#x673A;&#x81EA;&#x542F;&#x52A8;</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&apos;route add -net 172.16.0.0/12 gateway 172.30.204.1&apos;</span> &gt;&gt; /etc/rc.local
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&apos;route add -net 10.0.0.0/8 gateway 172.30.204.1&apos;</span> &gt;&gt; /etc/rc.local
+</code></pre>
+<h3 id="vpn-&#x76F8;&#x5173;&#x6587;&#x4EF6;">VPN &#x76F8;&#x5173;&#x6587;&#x4EF6;</h3>
+<p><code>vi /etc/ppp/chap-secrets</code> &#x89C2;&#x5BDF;&#x4E00;&#x4E0B;&#x5373;&#x53EF;&#x65E0;&#x9700;&#x7406;&#x4F1A;&#xFF1A;</p>
+<pre><code class="lang-bash"><span class="hljs-comment"># added by pptpsetup for &lt;VPN&#x540D;&#x79F0;&gt;</span>
+&lt;&#x7528;&#x6237;&#x540D;&gt; &lt;VPN&#x540D;&#x79F0;&gt; <span class="hljs-string">&quot;&lt;&#x5BC6;&#x7801;&gt;&quot;</span> *
+</code></pre>
+<h3 id="&#x8C03;&#x8BD5;&#x8FD0;&#x884C;">&#x8C03;&#x8BD5;&#x8FD0;&#x884C;</h3>
+<pre><code class="lang-bash"><span class="hljs-comment">#&#x76F4;&#x63A5;&#x8FD0;&#x884C;</span>
+pon <span class="hljs-variable">$VPN_NAME</span>
+
+tail <span class="hljs-operator">-f</span> /var/<span class="hljs-built_in">log</span>/messages
+Mar <span class="hljs-number">29</span> <span class="hljs-number">11</span>:<span class="hljs-number">15</span>:<span class="hljs-number">34</span> <span class="hljs-number">11</span>F-zhangmh-<span class="hljs-number">205238</span> pppd[<span class="hljs-number">19674</span>]: CHAP authentication succeeded
+Mar <span class="hljs-number">29</span> <span class="hljs-number">11</span>:<span class="hljs-number">15</span>:<span class="hljs-number">34</span> <span class="hljs-number">11</span>F-zhangmh-<span class="hljs-number">205238</span> pppd[<span class="hljs-number">19674</span>]: CCP terminated by peer (No compression negotiated)
+Mar <span class="hljs-number">29</span> <span class="hljs-number">11</span>:<span class="hljs-number">15</span>:<span class="hljs-number">34</span> <span class="hljs-number">11</span>F-zhangmh-<span class="hljs-number">205238</span> pppd[<span class="hljs-number">19674</span>]: Compression disabled by peer.
+Mar <span class="hljs-number">29</span> <span class="hljs-number">11</span>:<span class="hljs-number">15</span>:<span class="hljs-number">34</span> <span class="hljs-number">11</span>F-zhangmh-<span class="hljs-number">205238</span> pppd[<span class="hljs-number">19674</span>]: <span class="hljs-built_in">local</span>  IP address <span class="hljs-number">10.10</span>.<span class="hljs-number">5.2</span>
+Mar <span class="hljs-number">29</span> <span class="hljs-number">11</span>:<span class="hljs-number">15</span>:<span class="hljs-number">34</span> <span class="hljs-number">11</span>F-zhangmh-<span class="hljs-number">205238</span> pppd[<span class="hljs-number">19674</span>]: remote IP address <span class="hljs-number">10.10</span>.<span class="hljs-number">5.254</span>
+
+<span class="hljs-comment">#&#x8868;&#x793A;&#x62E8;&#x53F7;&#x6210;&#x529F;</span>
+</code></pre>
+<blockquote>
+<p>&#x53E6;&#x5916;&#x901A;&#x8FC7; <code>ifconfig</code> &#x89C2;&#x5BDF;&#x662F;&#x5426;&#x6709; <code>ppp0</code> &#x63A5;&#x53E3;&#xFF0C;&#x5982;&#x679C;&#x6709;&#x4E00;&#x822C;&#x90FD;&#x8868;&#x793A;&#x8FDE;&#x63A5;&#x6210;&#x529F;.</p>
+</blockquote>
+<p>&#x6B64;&#x65F6;&#xFF0C;vpn&#x867D;&#x7136;&#x5DF2;&#x7ECF;&#x94FE;&#x63A5;&#xFF0C;&#x4F46;&#x662F;&#x7CFB;&#x7EDF;&#x9ED8;&#x8BA4;&#x8DEF;&#x7531;&#x6CA1;&#x6709;&#x66F4;&#x6539;&#xFF0C;&#x9700;&#x8981;&#x914D;&#x7F6E;</p>
+<pre><code class="lang-bash">route add -net <span class="hljs-number">0.0</span>.<span class="hljs-number">0.0</span> dev <span class="hljs-variable">$iface</span>
+</code></pre>
+<blockquote>
+<p>&#x8BF7;&#x52A1;&#x5FC5;&#x786E;&#x8BA4;<strong>&#x5B89;&#x5168;&#x8DEF;&#x7531;</strong> &#x5DF2;&#x7ECF;&#x6DFB;&#x52A0;&#xFF0C;&#x5426;&#x5219;&#x4F1A;&#x5BFC;&#x81F4; ssh &#x77AC;&#x95F4;&#x65AD;&#x7EBF;&#xFF01;</p>
+</blockquote>
+<p>&#x6700;&#x540E;&#x53EF;&#x4EE5;&#x7528;<code>curl http://ip.cn</code>&#x89C2;&#x5BDF;&#x4E00;&#x4E0B; IP &#x662F;&#x5426;&#x6709;&#x53D8;&#x5316;.</p>
+<h3 id="redialsh-&#x6E90;&#x4EE3;&#x7801;">redial.sh &lt;&#x6E90;&#x4EE3;&#x7801;&gt;</h3>
+<pre><code class="lang-bash"><span class="hljs-shebang">#!/bin/bash
+</span>
+<span class="hljs-built_in">source</span> /etc/profile
+
+iface=ppp0 <span class="hljs-comment">#iface&#x63A5;&#x53E3;&#x540D;&#x79F0;&#x4E00;&#x822C;&#x4E3A;ppp0,&#x4E0D;&#x9700;&#x8981;&#x4FEE;&#x6539;</span>
+profile=<span class="hljs-number">60</span> <span class="hljs-comment">#&#x4FEE;&#x6539;&#x8FD9;&#x91CC;&#x4E3A;&#x4F60;&#x7684;VPN&#x94FE;&#x63A5;&#x540D;</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&apos;close connection.....&apos;</span>
+poff  <span class="hljs-variable">$profile</span> &gt;/dev/null <span class="hljs-number">2</span>&gt;&amp;<span class="hljs-number">1</span>
+ifconfig <span class="hljs-variable">$iface</span> down
+sleep <span class="hljs-number">1</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&apos;clean unused routing.....&apos;</span>
+oldip=$(route -n|grep -v grep|grep UGH|awk <span class="hljs-string">&apos;{print $1}&apos;</span>)
+route del -net <span class="hljs-number">0.0</span>.<span class="hljs-number">0.0</span> dev <span class="hljs-variable">$iface</span>  &gt;/dev/null <span class="hljs-number">2</span>&gt;&amp;<span class="hljs-number">1</span>
+<span class="hljs-keyword">for</span> ip <span class="hljs-keyword">in</span> <span class="hljs-variable">$oldip</span>;<span class="hljs-keyword">do</span>
+    route del -net <span class="hljs-variable">$ip</span>  netmask <span class="hljs-number">255.255</span>.<span class="hljs-number">255.255</span> dev eth0
+<span class="hljs-keyword">done</span>
+
+sleep <span class="hljs-number">1</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&apos;try to redial .....&apos;</span>
+pon <span class="hljs-variable">$profile</span> &gt;/dev/null <span class="hljs-number">2</span>&gt;&amp;<span class="hljs-number">1</span>
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> `seq <span class="hljs-number">1</span> <span class="hljs-number">20</span>`;<span class="hljs-keyword">do</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;waiting for gateway .... <span class="hljs-variable">$i</span>&quot;</span>
+    ifconfig |grep <span class="hljs-string">&quot;P-t-P&quot;</span> &gt;/dev/null <span class="hljs-number">2</span>&gt;&amp;<span class="hljs-number">1</span>
+    <span class="hljs-keyword">if</span> [ $? <span class="hljs-operator">-eq</span> <span class="hljs-number">0</span> ];<span class="hljs-keyword">then</span>
+     route add -net <span class="hljs-number">0.0</span>.<span class="hljs-number">0.0</span> dev <span class="hljs-variable">$iface</span> 
+     curl http://ip.cn
+     <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;OK&quot;</span>
+     <span class="hljs-built_in">exit</span> <span class="hljs-number">0</span> 
+   <span class="hljs-keyword">fi</span>
+   sleep <span class="hljs-number">1</span>
+<span class="hljs-keyword">done</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;FAIL&quot;</span> 
+<span class="hljs-built_in">exit</span> <span class="hljs-number">1</span>
+</code></pre>
+<p>&#x7528;&#x4EFB;&#x610F;&#x7F16;&#x8F91;&#x5668;&#x4FDD;&#x5B58;&#x4E3A;<code>redial.sh</code>,&#x5E76;&#x6267;&#x884C;<code>chmod 755 redial.sh &amp;&amp; cp redial.sh /usr/sbin</code> &#x5C1D;&#x8BD5;&#x8FD0;&#x884C;&#x5373;&#x53EF;.</p>
+<blockquote>
+<p>&#x6E90;&#x4EE3;&#x7801;&#x548C;&#x8BF4;&#x660E;&#x6587;&#x4EF6;&#x5728; <a href="https://github.com/onion83/redail.git" target="_blank">https://github.com/onion83/redail.git</a> &#x968F;&#x65F6;&#x66F4;&#x65B0;.</p>
+</blockquote>
+
+                    
+                    </section>
+                
+                
+                </div>
+            </div>
+        </div>
+
+        
+        <a href="./index.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Introduction"><i class="fa fa-angle-left"></i></a>
+        
+        
+    </div>
+</div>
+
+        
+<script src="gitbook/app.js"></script>
+
+    
+    <script src="gitbook/plugins/gitbook-plugin-search/lunr.min.js"></script>
+    
+
+    
+    <script src="gitbook/plugins/gitbook-plugin-search/search.js"></script>
+    
+
+    
+    <script src="gitbook/plugins/gitbook-plugin-sharing/buttons.js"></script>
+    
+
+    
+    <script src="gitbook/plugins/gitbook-plugin-fontsettings/buttons.js"></script>
+    
+
+<script>
+require(["gitbook"], function(gitbook) {
+    var config = {"highlight":{},"search":{"maxIndexSize":1000000},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2}};
+    gitbook.start(config);
+});
+</script>
+
+        
+    </body>
+    
+</html>
