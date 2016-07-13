@@ -41,11 +41,11 @@ echo 'route add -net 10.0.0.0/8 gateway 172.30.204.1' >> /etc/rc.local
 pon $VPN_NAME
 
 tail -f /var/log/messages
-Mar 29 11:15:34 11F-zhangmh-205238 pppd[19674]: CHAP authentication succeeded
-Mar 29 11:15:34 11F-zhangmh-205238 pppd[19674]: CCP terminated by peer (No compression negotiated)
-Mar 29 11:15:34 11F-zhangmh-205238 pppd[19674]: Compression disabled by peer.
-Mar 29 11:15:34 11F-zhangmh-205238 pppd[19674]: local  IP address 10.10.5.2
-Mar 29 11:15:34 11F-zhangmh-205238 pppd[19674]: remote IP address 10.10.5.254
+Mar 29 11:15:34 xxx pppd[19674]: CHAP authentication succeeded
+Mar 29 11:15:34 xxx pppd[19674]: CCP terminated by peer (No compression negotiated)
+Mar 29 11:15:34 xxx pppd[19674]: Compression disabled by peer.
+Mar 29 11:15:34 xxx pppd[19674]: local  IP address 10.10.5.2
+Mar 29 11:15:34 xxx pppd[19674]: remote IP address 10.10.5.254
 
 #表示拨号成功
 ```
